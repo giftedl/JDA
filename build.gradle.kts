@@ -67,7 +67,7 @@ val javaVersion = JavaVersion.current()
 project.group = "net.dv8tion"
 
 base {
-    archivesName.set("JDA")
+    archivesName.set("jda")
 }
 
 java {
@@ -445,7 +445,7 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/OWNER/REPOSITORY")
+            url = uri("https://maven.pkg.github.com/giftedl/JDA")
             credentials {
                 username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
                 password = project.findProperty("gpr.key") as String? ?: System.getenv("TOKEN")
@@ -454,6 +454,8 @@ publishing {
     }
     publications {
         register<MavenPublication>("gpr") {
+            artifactId = "jda"
+
             from(components["java"])
         }
     }
