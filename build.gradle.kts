@@ -445,16 +445,16 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/giftedl/JDA")
+            url = uri("https://maven.pkg.github.com/OWNER/REPOSITORY")
             credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+                username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.key") as String? ?: System.getenv("TOKEN")
             }
         }
     }
     publications {
-        gpr(MavenPublication) {
-            from(components.java)
+        register<MavenPublication>("gpr") {
+            from(components["java"])
         }
     }
 }
