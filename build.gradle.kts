@@ -442,23 +442,20 @@ val SoftwareComponentContainer.java
 val stagingDirectory = layout.buildDirectory.dir("staging-deploy").get()
 
 publishing {
-    publications {
-        register<MavenPublication>("Release") {
-            from(components["java"])
-
-            artifactId = project.name
-            groupId = project.group as String
-            version = project.version as String
-
-            artifact(sourcesJar)
-            artifact(javadocJar)
-
-            pom.populate()
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/giftedl/JDA")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+            }
         }
     }
-
-    repositories.maven {
-        url = stagingDirectory.asFile.toURI()
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
+        }
     }
 }
 
