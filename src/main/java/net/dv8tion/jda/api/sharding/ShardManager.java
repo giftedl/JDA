@@ -1171,6 +1171,8 @@ public interface ShardManager extends IGuildChannelContainer<Channel>
      */
     void shutdown(int shardId);
 
+    void setMobileIdentify(boolean mobileIdentify);
+
     /**
      * Adds a new shard with the given id to this ShardManager and starts it.
      *

@@ -115,6 +115,7 @@ public class WebSocketClient extends WebSocketAdapter implements WebSocketListen
 
     protected final TLongObjectMap<ConnectionRequest> queuedAudioConnections = MiscUtil.newLongMap();
     protected final Queue<DataObject> chunkSyncQueue = new ConcurrentLinkedQueue<>();
+    protected final boolean mobileIdentify;
     protected final Queue<DataObject> ratelimitQueue = new ConcurrentLinkedQueue<>();
 
     protected volatile long ratelimitResetTime;
@@ -132,7 +133,7 @@ public class WebSocketClient extends WebSocketAdapter implements WebSocketListen
 
     protected volatile ConnectNode connectNode;
 
-    public WebSocketClient(JDAImpl api, Compression compression, int gatewayIntents, GatewayEncoding encoding)
+    public WebSocketClient(JDAImpl api, Compression compression, int gatewayIntents, GatewayEncoding encoding, Boolean mobileIdentify)
     {
         this.api = api;
         this.executor = api.getGatewayPool();
@@ -143,6 +144,7 @@ public class WebSocketClient extends WebSocketAdapter implements WebSocketListen
         this.encoding = encoding;
         this.shouldReconnect = api.isAutoReconnect();
         this.connectNode = new StartingNode();
+        this.mobileIdentify = mobileIdentify;
         setupHandlers();
         try
         {
@@ -752,7 +754,7 @@ public class WebSocketClient extends WebSocketAdapter implements WebSocketListen
         PresenceImpl presenceObj = (PresenceImpl) api.getPresence();
         DataObject connectionProperties = DataObject.empty()
             .put("os", System.getProperty("os.name"))
-            .put("browser", "JDA")
+            .put("browser", mobileIdentify ? "Discord iOS" : "JDA")
             .put("device", "JDA");
         DataObject payload = DataObject.empty()
             .put("presence", presenceObj.getFullPresence())

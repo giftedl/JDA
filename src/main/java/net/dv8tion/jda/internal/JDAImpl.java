@@ -127,6 +127,7 @@ public class JDAImpl implements JDA
     protected final SessionConfig sessionConfig;
     protected final MetaConfig metaConfig;
     protected final RestConfig restConfig;
+    protected final Boolean mobileIdentify;
 
     public ShutdownReason shutdownReason = ShutdownReason.USER_SHUTDOWN; // indicates why shutdown happened in awaitStatus / awaitReady
     protected WebSocketClient client;
@@ -151,12 +152,13 @@ public class JDAImpl implements JDA
 
     public JDAImpl(AuthorizationConfig authConfig)
     {
-        this(authConfig, null, null, null, null);
+        this(authConfig, null, null, null, null, false);
     }
 
     public JDAImpl(
             AuthorizationConfig authConfig, SessionConfig sessionConfig,
-            ThreadingConfig threadConfig, MetaConfig metaConfig, RestConfig restConfig)
+            ThreadingConfig threadConfig, MetaConfig metaConfig, RestConfig restConfig,
+            Boolean mobileIdentify)
     {
         this.authConfig = authConfig;
         this.threadConfig = threadConfig == null ? ThreadingConfig.getDefault() : threadConfig;
@@ -169,6 +171,7 @@ public class JDAImpl implements JDA
         this.audioController = new DirectAudioControllerImpl(this);
         this.eventCache = new EventCache();
         this.eventManager = new EventManagerProxy(new InterfacedEventManager(), this.threadConfig.getEventPool());
+        this.mobileIdentify = mobileIdentify;
     }
 
     public void handleEvent(@Nonnull GenericEvent event)
@@ -333,7 +336,7 @@ public class JDAImpl implements JDA
             LOG.info("Login Successful!");
         }
 
-        client = new WebSocketClient(this, compression, intents, encoding);
+        client = new WebSocketClient(this, compression, intents, encoding, mobileIdentify);
         // remove our MDC metadata when we exit our code
         if (previousContext != null)
             previousContext.forEach(MDC::put);
@@ -1414,4 +1417,5 @@ public class JDAImpl implements JDA
     {
         return threadConfig.getAudioPool(this::getIdentifierString);
     }
+
 }

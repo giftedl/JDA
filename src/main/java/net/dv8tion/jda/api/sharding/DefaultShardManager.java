@@ -155,6 +155,8 @@ public class DefaultShardManager implements ShardManager
 
     protected final IntFunction<? extends RestConfig> restConfigProvider;
 
+    protected boolean mobileIdentify = false;
+
     public DefaultShardManager(@Nonnull String token)
     {
         this(token, null);
@@ -538,7 +540,7 @@ public class DefaultShardManager implements ShardManager
         if (restConfig == null)
             restConfig = new RestConfig();
 
-        JDAImpl jda = new JDAImpl(authConfig, sessionConfig, threadingConfig, metaConfig, restConfig);
+        JDAImpl jda = new JDAImpl(authConfig, sessionConfig, threadingConfig, metaConfig, restConfig, mobileIdentify);
         jda.setMemberCachePolicy(shardingConfig.getMemberCachePolicy());
         threadingConfig.init(jda::getIdentifierString);
         jda.initRequester();
@@ -637,6 +639,11 @@ public class DefaultShardManager implements ShardManager
     {
         ShardManager.super.setStatusProvider(statusProvider);
         presenceConfig.setStatusProvider(statusProvider);
+    }
+
+    @Override
+    public void setMobileIdentify(boolean mobileIdentify) {
+        this.mobileIdentify = mobileIdentify;
     }
 
     private synchronized void retrieveShardTotal(OkHttpClient httpClient)

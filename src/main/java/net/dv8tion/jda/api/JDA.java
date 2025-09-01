@@ -2069,6 +2069,8 @@ public interface JDA extends IGuildChannelContainer<Channel>
     @CheckReturnValue
     RestAction<Void> deleteTestEntitlement(long entitlementId);
 
+
+
     /**
      * Configures the required scopes applied to the {@link #getInviteUrl(Permission...)} and similar methods.
      * <br>To use slash commands you must add {@code "applications.commands"} to these scopes. The scope {@code "bot"} is always applied.

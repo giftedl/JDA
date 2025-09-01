@@ -79,6 +79,7 @@ public class JDABuilder
     protected VoiceDispatchInterceptor voiceDispatchInterceptor = null;
     protected OkHttpClient.Builder httpClientBuilder = null;
     protected OkHttpClient httpClient = null;
+    protected boolean mobileIdentify = false;
     protected WebSocketFactory wsFactory = null;
     protected String token = null;
     protected IEventManager eventManager = null;
@@ -967,6 +968,16 @@ public class JDABuilder
     }
 
     /**
+     * Sets the identify packet's browser property to mobile.
+     * This makes the bot appear as on mobile.
+     */
+    @Nonnull
+    public JDABuilder withMobileIdentify() {
+        this.mobileIdentify = true;
+        return this;
+    }
+
+    /**
      * Sets the {@link ScheduledExecutorService ScheduledExecutorService} used by
      * the main WebSocket connection for workers. These workers spend most of their lifetime
      * sleeping because they only activate for sending messages over the gateway.
@@ -1822,7 +1833,7 @@ public class JDABuilder
         SessionConfig sessionConfig = new SessionConfig(controller, httpClient, wsFactory, voiceDispatchInterceptor, flags, maxReconnectDelay, largeThreshold);
         MetaConfig metaConfig = new MetaConfig(maxBufferSize, contextMap, cacheFlags, flags);
 
-        JDAImpl jda = new JDAImpl(authConfig, sessionConfig, threadingConfig, metaConfig, restConfig);
+        JDAImpl jda = new JDAImpl(authConfig, sessionConfig, threadingConfig, metaConfig, restConfig, mobileIdentify);
         jda.setMemberCachePolicy(memberCachePolicy);
         // We can only do member chunking with the GUILD_MEMBERS intent
         if ((intents & GatewayIntent.GUILD_MEMBERS.getRawValue()) == 0)
