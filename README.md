@@ -42,3 +42,51 @@ val jda = JDABuilder.createDefault(token)
 This works by changing the identify packet (sent first in Gateway) to `Discord iOS`, making the bot appear on mobile.
 
 Thats it! Apart from that, this fork is exactly the same.
+
+## Maven
+
+```xml
+<repositories>
+  <repository>
+    <id>jitpack.io</id>
+	<url>https://www.jitpack.io</url>
+  </repository>
+</repositories>
+<dependency>
+  <groupId>com.github.giftedl</groupId>
+  <artifactId>JDA</artifactId>
+  <version>-11d8917c26-1</version>
+</dependency>
+```
+
+## Kotlin Gradle
+
+```kts
+dependencyResolutionManagement {
+  repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+  repositories {
+    mavenCentral()
+    maven { url = uri("https://www.jitpack.io") }
+  }
+}
+
+dependencies {
+  implementation("com.github.giftedl:JDA:-11d8917c26-1")
+}
+```
+
+## Groovy Gradle
+
+```
+dependencyResolutionManagement {
+  repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+  repositories {
+    mavenCentral()
+	maven { url 'https://www.jitpack.io' }
+   }
+}
+
+dependencies {
+  implementation 'com.github.giftedl:JDA:-11d8917c26-1'
+}
+```
